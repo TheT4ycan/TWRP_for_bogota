@@ -40,5 +40,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: TWRP-G56
-        path: work/out/target/product/bogota/vendor_boot.img
+        path: work/out/target/product/bogota/*.img
         
