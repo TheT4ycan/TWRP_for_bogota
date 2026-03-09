@@ -22,20 +22,28 @@ jobs:
           chmod a+x ~/bin/repo
           sudo ln -sf ~/bin/repo /usr/bin/repo
 
-      - name: Sync & Build
+      - name: Sync Sources
         run: |
           mkdir work && cd work
           git config --global user.name "taycan"
           git config --global user.email "daviitaycanzl02@gmail.com"
           repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1
           repo sync -j$(nproc --all) --force-sync
+
+      - name: Clone Device Tree
+        run: |
+          cd work
           mkdir -p device/motorola/bogota
           git clone https://github.com/TheT4ycan/TWRP_for_bogota.git device/motorola/bogota
+
+      - name: Build TWRP
+        run: |
+          cd work
           source build/envsetup.sh
           lunch twrp_bogota-eng
           mka vendor_bootimage -j$(nproc --all)
 
-      - name: Upload
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: TWRP-MotoG56-Final
