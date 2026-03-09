@@ -10,20 +10,43 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Setup Toolchain
+    - name: Install Build Tools
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential bc python3 photum zip
+        sudo apt-get install -y bc build-essential zip curl python3 git-core gnupg flex bison gperf libsdl1.1-dev libesd0-dev libwxgtk3.0-gtk3-dev squashfs-tools build-essential zip lzop libncurses5-dev zlib1g-dev g++-multilib gcc-multilib lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip lib32readline-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip
 
-    - name: Sync & Build
+    - name: Install Repo Tool
       run: |
-        # Aqui ele vai baixar o construtor direto para a máquina do GitHub
-        git clone https://github.com/akhilnarang/scripts.git scripts
-        cd scripts && bash setup/android_build_env.sh
-        cd ..
-        
-        # Comandos de build
-        git clone https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1 manifest
-        cd manifest
-        # (O resto do processo o GitHub faz direto no terminal)
+        mkdir -p ~/bin
+        curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+        chmod a+x ~/bin/repo
+        sudo ln -sf ~/bin/repo /usr/bin/repo
+
+    - name: Sync TWRP Sources
+      run: |
+        mkdir work
+        cd work
+        git config --global user.name "Angel"
+        git config --global user.email "angel@example.com"
+        repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1
+        repo sync -j$(nproc --all) --force-sync
+
+    - name: Clone Device Tree
+      run: |
+        cd work
+        git clone https://github.com/TheT4ycan/TWRP_for_bogota.git device/motorola/bogota
+
+    - name: Build recovery.img
+      run: |
+        cd work
+        export ALLOW_MISSING_DEPENDENCIES=true
+        source build/envsetup.sh
+        lunch twrp_bogota-eng
+        mka vendorbootimage -j$(nproc --all)
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: TWRP-MotoG56-Bogota
+        path: work/out/target/product/bogota/vendor_boot.img
         
