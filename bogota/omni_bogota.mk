@@ -18,7 +18,7 @@ $(call inherit-product, device/motorola/bogota/device.mk)
 PRODUCT_DEVICE := bogota
 PRODUCT_NAME := omni_bogota
 PRODUCT_BRAND := motorola
-PRODUCT_MODEL := moto g73 5G
+PRODUCT_MODEL := moto g56 5G
 PRODUCT_MANUFACTURER := motorola
 
 PRODUCT_GMS_CLIENTID_BASE := android-motorola
