@@ -14,7 +14,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, device/motorola/bogota/device.mk)
 
 PRODUCT_DEVICE := bogota
-PRODUCT_NAME := twrp_bogota
+PRODUCT_NAME := bogota
 PRODUCT_BRAND := motorola
 PRODUCT_MODEL := moto g56 5G
 PRODUCT_MANUFACTURER := motorola
