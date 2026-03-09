@@ -31,7 +31,7 @@ jobs:
         repo sync -j$(nproc --all)
         git clone https://github.com/TheT4ycan/TWRP_for_bogota.git device/motorola/bogota
         source build/envsetup.sh
-        lunch twrp_bogota-eng
+        lunch twrp_bogota-eng || lunch omni_bogota-eng
         mka vendorbootimage -j$(nproc --all)
 
     - name: Upload
