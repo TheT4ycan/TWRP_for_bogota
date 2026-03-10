@@ -1,6 +1,3 @@
 /*
- * Your warranty is now void.
- *
- * I am not responsible for bricked devices, dead SD cards,
- * or any damage caused to your device. 
- * TWRP for Bogota, this is a very early version.
+ * Device tree of Moto G56[mt6886]
+ * if you use this, credit me
